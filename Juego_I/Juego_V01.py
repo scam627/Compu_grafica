@@ -31,9 +31,11 @@ if __name__=='__main__':
     Jugadores.add(jugador)
     cereza_st=False
     nc=0
+    ncc=0
     ncp=0
-    v=5
+    v=3
     p=0
+    np=0
     reloj=pygame.time.Clock()
     fin_juego=False
     fin=False
@@ -59,19 +61,31 @@ if __name__=='__main__':
             General.update()
             General.draw(pantalla)
             pygame.draw.polygon(pantalla,AZUL,[[0,395],[v*100,395],[v*100,400],[0,400]])
-            texto=fuente.render("Puntos= "+str(p),True,NEGRO)
-            pantalla.blit(texto,[10,20])
+            points=fuente.render("Puntos= "+str(p),True,NEGRO)
+            pantalla.blit(points,[10,360])
             pygame.display.flip()
             lf_col=pygame.sprite.spritecollide(final,Frutas,True)
             li_col=pygame.sprite.spritecollide(inicial,Flechas,True)
             lff_col=pygame.sprite.groupcollide(Flechas,Frutas,True,True)
             lffp_col=pygame.sprite.groupcollide(Flechas,Frutas_Pod,True,True)
             lj_col=pygame.sprite.spritecollide(jugador,Frutas,True)
+            ljp_col=pygame.sprite.spritecollide(jugador,Frutas_Pod,True)
             if nc==5:
                 cereza_pod=Cereza_podrida()
                 Frutas_Pod.add(cereza_pod)
                 General.add(cereza_pod)
                 nc=0
+            if np>=15 and v < 6 :
+                v+=1;
+                np=0
+            if ncc==3:
+                v-=1
+                ncc=0
+            if p==30:
+                for element in Frutas:
+                    element.var_y=3
+                for element in Frutas_Pod:
+                    elemen.var_y=3
             if not cereza_st:
                 cereza=Cereza()
                 Frutas.add(cereza)
@@ -80,15 +94,21 @@ if __name__=='__main__':
                 cereza_st=True
             for element in lffp_col:
                 p+=2
+                np+=2
             for element in lff_col:
                 p-=1
+                np-=1
+                ncc+=1
                 cereza_st=False
             for element in lf_col:
-                v-=1
+                ncc+=1
                 cereza_st=False
             for element in lj_col:
                 p+=1
+                np+=1
                 cereza_st=False
+            for element in ljp_col:
+                v-=1
             if v==0:
                 fin_juego=True
             reloj.tick(60)
