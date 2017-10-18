@@ -2,6 +2,7 @@
 
 En este repositorio encontraras videojuegos creados en python
 con manejo sprite y conceptos básicos de computación gráfica
+
 # PRIMER PROCESADOR
 
 El objetivo del primer procesador es dejar la parte aritmetico logica funcionando
@@ -40,6 +41,7 @@ sub %g1,%g2,%o4
 |10|00010|000000|00000|1|111111111001|
 
 |op|rd|op3|rs1|i|unused|rs2|
+|--|--|---|---|-|------|---|
 |10|01000|000000|00001|0|0000000|00010|
 |10|01001|000011|00001|0|0000000|00010|
 |10|01010|000101|00001|0|0000000|00010|
