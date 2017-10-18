@@ -23,7 +23,7 @@ de la [arquitectura SPARC V8.](http://www.gaisler.com/doc/sparcv8.pdf)
   * ADD   --> OP => 000000
   * SUB   --> OP => 000100
 
-```
+```assembler
 mov 8,%g1
 mov -7,%g2
 add %g1,%g2,%o0
