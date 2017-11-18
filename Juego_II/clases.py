@@ -94,7 +94,7 @@ class Naruto(pg.sprite.Sprite):
     	print "Iniciando valores constantes"
     	self.gravedad=5
     	self.max_y_salto=112
-    	self.sheet=pg.image.load('naruto.png').convert_alpha()
+    	self.sheet=pg.image.load(self.name).convert_alpha()
 
     def get_mat(self):
 		ancho_img,alto_img=self.sheet.get_size()
