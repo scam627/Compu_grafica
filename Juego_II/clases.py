@@ -44,6 +44,30 @@ class Barranco(Bosque):
 		self.rect.x=0
 		self.rect.y=260
 
+class Vidas(pg.sprite.Sprite):
+	def __init__(self,x,y):
+		pg.sprite.Sprite.__init__(self)
+		self.name='Recursos/Objetos/vidas.png'
+		self.sheet=pg.image.load(self.name).convert_alpha()
+		self.existo=True
+		self.rect=self.sheet.get_rect()
+		self.get_mat()
+		self.image=self.m[0][0]
+		self.rect.x=x
+		self.rect.y=y
+	def get_mat(self):
+		row_img=[]
+		self.m=[]
+		recorte=self.sheet.subsurface((0,0,72,96))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((74,0,72,96))
+		row_img.append(recorte)
+		self.m.append(row_img)
+	def update(self):
+		if self.existo:
+			self.image=self.m[0][0]
+		else:
+			self.image=self.m[0][1]
 class Enemys(pg.sprite.Sprite):
     def __init__(self,d):
         pg.sprite.Sprite.__init__(self)

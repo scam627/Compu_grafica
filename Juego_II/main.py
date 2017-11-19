@@ -6,7 +6,23 @@ from recursos import *
 import pygame
 import random 
 import sys 
-#render es para agregar texto
+
+def actualizar(pantalla,lls):
+    for i in lls:
+        i.update()
+        i.draw(pantalla)
+    pygame.display.flip()
+
+def dibujar(pantalla,lo):
+    t=0
+    for i in lo:
+        pantalla.blit(i.image,[CX[t],CY[t]])
+        t+=1
+
+def final_game(pantalla):
+    muerto=pygame.image.load('Recursos/Objetos/gameover.jpg')
+    pantalla.blit(muerto,[150,80])
+    pygame.display.flip()
 
 def inicio(enemy,jugador):
     jugador.dir=11
@@ -17,10 +33,7 @@ def inicio(enemy,jugador):
     general.add(enemy)
     for i in range(9):
         enemy.rect.y+=20
-        pantalla.blit(fondo.image,[fondo.x,fondo.y])
-        pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-        mapa.update()
-        mapa.draw(pantalla)
+        dibujar(pantalla,lo)
         general.update()
         general.draw(pantalla)
         pygame.display.flip()
@@ -62,26 +75,37 @@ if __name__== '__main__':
     pygame.display.set_caption('Naruto ninja')
     pantalla=pygame.display.set_mode([ANCHO,ALTO])
     pantalla.fill(NEGRO)
-    #en1=Enemys(260)
+    lv=[]
+    one=Vidas(20,270)
+    two=Vidas(80,270)
+    three=Vidas(140,270)
+    lv.append(one)
+    lv.append(two)
+    lv.append(three)
     en=Enemys(260)
     bl=Naruto(265)
     bl.rect.x=300
+    lo=[]
     prado=Prado()
     barranco=Barranco()
     arbol=Arboles()
-    fondo1=Fondo(512,0)
     fondo=Fondo(0,0)
+    fondoo=Fondo(512,0)
+    lo.append(fondo)
+    lo.append(fondoo)
+    lo.append(arbol)
+    lo.append(barranco)
+    lo.append(prado)
     jugadores=pygame.sprite.Group()
     enemys=pygame.sprite.Group()
+    lls=[]
     general=pygame.sprite.Group()
-    mapa=pygame.sprite.Group()
-    #general.add(en1
+    lls.append(general)
+    general.add(one)
+    general.add(two)
+    general.add(three)
     general.add(bl)
     jugadores.add(bl)
-    mapa.add(barranco)
-    mapa.add(prado)
-    mapa.add(arbol)
-    #en1.rect.x=599
     existe=True
     reloj=pygame.time.Clock()
     general.draw(pantalla)
@@ -133,12 +157,8 @@ if __name__== '__main__':
                             for i in range(len(bl.m[bl.dir])):    
                                 bl.x=i
                                 bl.rect.y-=bl.gravedad
-                                pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                                pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                                mapa.update()
-                                mapa.draw(pantalla)
-                                general.update()
-                                general.draw(pantalla)
+                                dibujar(pantalla,lo)
+                                actualizar(pantalla,lls)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                         bl.dir=9
@@ -146,12 +166,8 @@ if __name__== '__main__':
                             for i in range(len(bl.m[bl.dir])):    
                                 bl.x=i
                                 bl.rect.y+=bl.gravedad
-                                pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                                pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                                mapa.update()
-                                mapa.draw(pantalla)
-                                general.update()
-                                general.draw(pantalla)
+                                dibujar(pantalla,lo)
+                                actualizar(pantalla,lls)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                     else:
@@ -165,12 +181,8 @@ if __name__== '__main__':
                                 else:
                                     bl.rect.x-=VAL_X[i]
                                     bl.rect.y-=VAL_Y[i]
-                                pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                                pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                                mapa.update()
-                                mapa.draw(pantalla)
-                                general.update()
-                                general.draw(pantalla)
+                                dibujar(pantalla,lo)
+                                actualizar(pantalla,lls)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                         bl.dir=9
@@ -183,12 +195,8 @@ if __name__== '__main__':
                                 else:
                                     bl.rect.x-=VAL_X[i]
                                     bl.rect.y+=VAL_Y[i]
-                                pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                                pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                                mapa.update()
-                                mapa.draw(pantalla)
-                                general.update()
-                                general.draw(pantalla)
+                                dibujar(pantalla,lo)
+                                actualizar(pantalla,lls)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                     actual=bl.dir
@@ -200,12 +208,8 @@ if __name__== '__main__':
                     bl.x=0
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
-                        pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                        pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                        mapa.update()
-                        mapa.draw(pantalla)
-                        general.update()
-                        general.draw(pantalla)
+                        dibujar(pantalla,lo)
+                        actualizar(pantalla,lls)
                         pygame.display.flip()
                         reloj.tick(TIME)
                     actual=bl.dir
@@ -228,12 +232,8 @@ if __name__== '__main__':
                 if pygame.mouse.get_pressed() == (1,0,0):
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
-                        pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                        pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                        mapa.update()
-                        mapa.draw(pantalla)
-                        general.update()
-                        general.draw(pantalla)
+                        dibujar(pantalla,lo)
+                        actualizar(pantalla,lls)
                         pygame.display.flip()
                         reloj.tick(TIME)
                 if pygame.mouse.get_pressed() == (0,1,0):
@@ -241,12 +241,8 @@ if __name__== '__main__':
                     bl.x=0
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
-                        pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                        pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                        mapa.update()
-                        mapa.draw(pantalla)
-                        general.update()
-                        general.draw(pantalla)
+                        dibujar(pantalla,lo)
+                        actualizar(pantalla,lls)
                         pygame.display.flip()
                         reloj.tick(TIME)
                 if pygame.mouse.get_pressed() == (0,0,1):
@@ -254,13 +250,8 @@ if __name__== '__main__':
                     bl.x=0
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
-                        pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                        pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                        mapa.update()
-                        mapa.draw(pantalla)
-                        general.update()
-                        general.draw(pantalla)
-                        pygame.display.flip()
+                        dibujar(pantalla,lo)
+                        actualizar(pantalla,lls)
                         reloj.tick(TIME)
                 actual=bl.dir
             if event.type==pygame.MOUSEBUTTONUP:
@@ -274,7 +265,6 @@ if __name__== '__main__':
                 bl.caer=False
                 actual=bl.dir
         persecution(en,bl)
-        #persecution(en1,bl)
         col_je=pygame.sprite.spritecollide(bl,enemys,False)
         col_ej=pygame.sprite.spritecollide(en,jugadores,False)
         for element in col_je:
@@ -286,34 +276,30 @@ if __name__== '__main__':
         for element in col_ej:
             if en.dir==7 and (bl.dir != 0 and bl.dir != 1 and bl.dir != 2) and number_enemys>0:
                 bl.dir=12
+                bl.salud-=2
             else:
                 bl.dir=actual
+        if bl.salud <= 0:
+            if len(lv) > 0:
+                lv[(len(lv)-1)].existo=False
+                lv.pop()
+                bl.salud=100
         if en.salud <= 0 and existe:
             en.dir=4
             en.x=0
             en.mover=False
             en.golpeo=False
             en.combo=False
-            pantalla.blit(fondo.image,[fondo.x,fondo.y])
-            pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-            mapa.update()
-            mapa.draw(pantalla)
-            general.update()
-            general.draw(pantalla)
-            pygame.display.flip()
+            dibujar(pantalla,lo)
+            actualizar(pantalla,lls)
             reloj.tick(TIME)
             en.dir=5
             for i in range(len(en.m[en.dir])):
                 en.x=i
                 en.rect.x-=4
                 en.rect.y+=4
-                pantalla.blit(fondo.image,[fondo.x,fondo.y])
-                pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-                mapa.update()
-                mapa.draw(pantalla)
-                general.update()
-                general.draw(pantalla)
-                pygame.display.flip()
+                dibujar(pantalla,lo)
+                actualizar(pantalla,lls)
                 reloj.tick(5)
                 existe=False
             general.remove(en)
@@ -325,13 +311,19 @@ if __name__== '__main__':
                 number_enemys-=1
             else:
                 existe=False
-        pantalla.blit(fondo.image,[fondo.x,fondo.y])
-        pantalla.blit(fondo1.image,[fondo1.x,fondo1.y])
-        mapa.update()
-        mapa.draw(pantalla)
-        general.update()
-        general.draw(pantalla)
-        pygame.display.flip()
+        if not GAMEOVER:
+            if len(lv)==0:
+                dibujar(pantalla,lo)
+                actualizar(pantalla,lls)
+                GAMEOVER=True
+                print "gameover"
+                reloj.tick(TIME)
+            else:
+                dibujar(pantalla,lo)
+                actualizar(pantalla,lls)
+        else:
+            final_game(pantalla)
+            print "Game Over"
         bl.dir=actual
         reloj.tick(TIME)
         #bl.rect.x-=2
