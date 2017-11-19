@@ -44,6 +44,209 @@ class Barranco(Bosque):
 		self.rect.x=0
 		self.rect.y=260
 
+class Enemys(pg.sprite.Sprite):
+    def __init__(self,d):
+        pg.sprite.Sprite.__init__(self)
+        self.name='Recursos/Personajes/enemy.png'
+       	self.init_constantes()
+       	self.init_bool_variables()
+       	self.init_variables(d)
+
+    def update(self):
+        if self.mover :
+        	self.movimiento()
+    	if self.combo:  
+    		self.animacion()
+    	if self.golpeo:
+    		self.golpe()
+        if self.rect.x>=ANCHO-self.rect[2]:
+            self.var_x=0
+        if self.rect.x<=0:
+            self.rect.x=0
+            self.var_x=0
+        if not self.orien:
+        	if self.x<len(self.m[self.dir+8]):
+    			self.image=self.m[self.dir+8][self.x]
+    	else:
+        	if self.x<len(self.m[self.dir+8]):
+    			self.image=self.m[self.dir][self.x]
+
+    def init_bool_variables(self):
+    	print "Iniciando valores booleanos"
+    	self.mover=False
+    	self.golpeo=False
+    	self.combo=True
+    	self.orien=True
+
+    def init_variables(self,d):
+    	print "Iniciando valores variables"
+    	self.my=d
+    	self.salud=50
+    	self.dir=0
+    	self.x=0
+    	self.get_mat()
+    	self.image=self.m[self.dir][self.x]
+        self.rect=self.image.get_rect()
+        self.rect.y=self.my-self.image.get_size()[1]
+        self.var_x=0
+
+    def init_constantes(self):
+    	print "Iniciando valores constantes"
+    	self.gravedad=5
+    	self.max_y_salto=112
+    	self.sheet=pg.image.load(self.name).convert_alpha()
+
+    def get_mat(self):
+		ancho_img,alto_img=self.sheet.get_size()
+		row_img=[]
+		self.m=[]
+		recorte=self.sheet.subsurface((0,0,34,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((36,0,34,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((72,0,34,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((108,0,34,40))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((0,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((44,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((88,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((132,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((175,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((218,42,42,41))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((0,85,32,48))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((0,135,33,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((35,135,33,40))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((0,177,32,32))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((0,209,42,30))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((44,209,42,30))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((88,209,42,30))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((132,209,42,30))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((0,243,32,32))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((0,277,50,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((48,277,50,40))
+		row_img.append(recorte)    
+		recorte=self.sheet.subsurface((98,277,50,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((148,277,50,40))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((571,0,34,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((535,0,34,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((499,0,34,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((463,0,34,40))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((563,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((519,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((475,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((431,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((387,42,42,41))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((343,42,42,41))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((573,85,32,48))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((572,135,33,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((537,135,33,40))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((573,177,32,32))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((531,209,42,30))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((487,209,42,30))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((443,209,42,30))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((399,209,42,30))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((573,243,32,32))
+		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((555,277,50,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((503,277,50,40))
+		row_img.append(recorte)    
+		recorte=self.sheet.subsurface((451,277,50,40))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((399,277,50,40))
+		row_img.append(recorte)
+		self.m.append(row_img)
+    
+    def golpe(self):
+    	if self.x<len(self.m[self.dir])-1:
+    		self.x+=1
+    	else:
+    		self.x=0
+
+    def movimiento(self):
+    	self.rect.x+=self.var_x
+    	self.rect.y=self.my-self.image.get_size()[1]
+    	if self.x < len(self.m[self.dir])-1:
+            self.x+=1
+        else:
+            self.x=0
+
+    def animacion(self):
+    	if self.x < len(self.m[self.dir])-1:
+            self.x+=1
+        else:
+        	self.dir=0
+        	self.x=0
+            
+
+
 
 class Naruto(pg.sprite.Sprite):
     def __init__(self,d):
@@ -57,14 +260,14 @@ class Naruto(pg.sprite.Sprite):
         if self.mover :
         	self.movimiento()
     	if self.estatico:  
-    			self.quieto()
+    		self.quieto()
         if self.rect.x>=ANCHO-self.rect[2]:
             self.var_x=0
         if self.rect.x<=0:
             self.rect.x=0
             self.var_x=0
         if not self.orien:
-    		self.image=self.m[self.dir+12][self.x]
+    		self.image=self.m[self.dir+13][self.x]
     	else:
     		self.image=self.m[self.dir][self.x]
 
@@ -80,10 +283,10 @@ class Naruto(pg.sprite.Sprite):
     def init_variables(self,d):
     	print "Iniciando valores variables"
     	self.my=d
+    	self.salud=100
+    	self.vidas=3
     	self.dir=11
     	self.x=0
-    	self.vel_x=0
-    	self.vel_y=0
     	self.get_mat()
     	self.image=self.m[self.dir][self.x]
         self.rect=self.image.get_rect()
@@ -97,7 +300,7 @@ class Naruto(pg.sprite.Sprite):
     	self.sheet=pg.image.load(self.name).convert_alpha()
 
     def get_mat(self):
-		ancho_img,alto_img=self.sheet.get_size()
+		self.ancho_img,self.alto_img=self.sheet.get_size()
 		row_img=[]
 		self.m=[]
 		recorte=self.sheet.subsurface((0,0,56,48))
@@ -218,6 +421,12 @@ class Naruto(pg.sprite.Sprite):
 		row_img.append(recorte)
 		self.m.append(row_img)
 		row_img=[]
+		recorte=self.sheet.subsurface((0,612,40,48))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((40,612,40,48))
+		row_img.append(recorte)    
+		self.m.append(row_img)
+		row_img=[]
 		recorte=self.sheet.subsurface((910,0,56,48))
 		row_img.append(recorte)
 		recorte=self.sheet.subsurface((852,0,56,48))
@@ -334,6 +543,12 @@ class Naruto(pg.sprite.Sprite):
 		row_img.append(recorte)
 		recorte=self.sheet.subsurface((764,562,32,48))
 		row_img.append(recorte)
+		self.m.append(row_img)
+		row_img=[]
+		recorte=self.sheet.subsurface((926,612,40,48))
+		row_img.append(recorte)
+		recorte=self.sheet.subsurface((884,612,40,48))
+		row_img.append(recorte)    
 		self.m.append(row_img)
 
 
