@@ -7,11 +7,17 @@ import pygame
 import random 
 import sys 
 
-def actualizar(pantalla,lls):
+def actualizar(pantalla,lls,score):
     for i in lls:
         i.update()
         i.draw(pantalla)
+    fuentes(pantalla,score)
     pygame.display.flip()
+
+def fuentes(pantalla,score):
+    fuente=pygame.font.Font(None,36)
+    points=fuente.render("Puntos= "+str(score),True,AZUL)
+    pantalla.blit(points,[400,300])
 
 def dibujar(pantalla,lo):
     t=0
@@ -67,19 +73,19 @@ def inicio(enemy,jugador,enemys,general,pantalla,lo,reloj):
         reloj.tick(TIME)
     enemy.dir=0
 
-def persecution(enemy,jugador):
+def persecution(enemy,jugador,var):
     if enemy.x < len(enemy.m[1]) and enemy.x < len(enemy.m[7]):
         if not enemy.golpeo:
             enemy.dir=1
             if jugador.rect.x>enemy.rect.x+enemy.m[enemy.dir][enemy.x].get_size()[0]:
-                enemy.var_x=5
+                enemy.var_x=var
                 enemy.dir=1
                 enemy.golpeo=False
                 enemy.mover=True
                 enemy.combo=False
                 enemy.orien=True
             if jugador.rect.x+jugador.m[jugador.dir][jugador.x].get_size()[0]<enemy.rect.x:
-                enemy.var_x=-5
+                enemy.var_x=-var
                 enemy.dir=1
                 enemy.mover=True
                 enemy.golpeo=False
@@ -192,7 +198,7 @@ def level_one(pantalla):
                                 bl.x=i
                                 bl.rect.y-=bl.gravedad
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                         bl.dir=9
@@ -201,7 +207,7 @@ def level_one(pantalla):
                                 bl.x=i
                                 bl.rect.y+=bl.gravedad
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                     else:
@@ -216,7 +222,7 @@ def level_one(pantalla):
                                     bl.rect.x-=VAL_X[i]
                                     bl.rect.y-=VAL_Y[i]
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                         bl.dir=9
@@ -230,7 +236,7 @@ def level_one(pantalla):
                                     bl.rect.x-=VAL_X[i]
                                     bl.rect.y+=VAL_Y[i]
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                     actual=bl.dir
@@ -259,7 +265,7 @@ def level_one(pantalla):
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
                         dibujar(pantalla,lo)
-                        actualizar(pantalla,lls)
+                        actualizar(pantalla,lls,score)
                         pygame.display.flip()
                         reloj.tick(TIME)
                 if pygame.mouse.get_pressed() == (0,1,0):
@@ -271,7 +277,7 @@ def level_one(pantalla):
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
                         dibujar(pantalla,lo)
-                        actualizar(pantalla,lls)
+                        actualizar(pantalla,lls,score)
                         pygame.display.flip()
                         reloj.tick(TIME)
                 if pygame.mouse.get_pressed() == (0,0,1):
@@ -283,7 +289,7 @@ def level_one(pantalla):
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
                         dibujar(pantalla,lo)
-                        actualizar(pantalla,lls)
+                        actualizar(pantalla,lls,score)
                         reloj.tick(TIME)
                 if pygame.mouse.get_pressed() == (1,0,1):
                     return [len(lv),bl.salud,score]
@@ -298,7 +304,7 @@ def level_one(pantalla):
                 bl.subir=False
                 bl.caer=False
                 actual=bl.dir
-        persecution(en,bl)
+        persecution(en,bl,5)
         col_je=pygame.sprite.spritecollide(bl,enemys,False)
         col_ej=pygame.sprite.spritecollide(en,jugadores,False)
         for element in col_je:
@@ -330,7 +336,7 @@ def level_one(pantalla):
             en.combo=False
             score+=3
             dibujar(pantalla,lo)
-            actualizar(pantalla,lls)
+            actualizar(pantalla,lls,score)
             reloj.tick(TIME)
             en.dir=5
             for i in range(len(en.m[en.dir])):
@@ -338,7 +344,7 @@ def level_one(pantalla):
                 en.rect.x-=4
                 en.rect.y+=4
                 dibujar(pantalla,lo)
-                actualizar(pantalla,lls)
+                actualizar(pantalla,lls,score)
                 reloj.tick(5)
                 existe=False
             general.remove(en)
@@ -366,17 +372,19 @@ def level_one(pantalla):
                 else:
                     existe=False
                     return [len(lv),bl.salud,score]
+        if score%10==0 and bl.salud <= 98:
+            bl.salud+=2
         if not PAUSE:
             if not GAMEOVER:
                 if len(lv)==0:
                     dibujar(pantalla,lo)
-                    actualizar(pantalla,lls)
+                    actualizar(pantalla,lls,score)
                     GAMEOVER=True
                     print "gameover"
                     reloj.tick(TIME)
                 else:
                     dibujar(pantalla,lo)
-                    actualizar(pantalla,lls)
+                    actualizar(pantalla,lls,score)
             else:
                 final_game(pantalla)
                 reloj.tick(5)
@@ -385,9 +393,11 @@ def level_one(pantalla):
         else:
             pausa(pantalla)
         bl.dir=actual
+        fuentes(pantalla,score)
         reloj.tick(TIME)
         #bl.rect.x-=2
 def level_two(pantalla,nv,salud,score):
+    fuente=pygame.font.Font(None,36)
     pantalla.fill(NEGRO)
     lv=[]
     one=Vidas(20,270)
@@ -486,7 +496,7 @@ def level_two(pantalla,nv,salud,score):
                                 bl.x=i
                                 bl.rect.y-=bl.gravedad
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                         bl.dir=9
@@ -495,7 +505,7 @@ def level_two(pantalla,nv,salud,score):
                                 bl.x=i
                                 bl.rect.y+=bl.gravedad
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                     else:
@@ -510,7 +520,7 @@ def level_two(pantalla,nv,salud,score):
                                     bl.rect.x-=VAL_X[i]
                                     bl.rect.y-=VAL_Y[i]
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                         bl.dir=9
@@ -524,7 +534,7 @@ def level_two(pantalla,nv,salud,score):
                                     bl.rect.x-=VAL_X[i]
                                     bl.rect.y+=VAL_Y[i]
                                 dibujar(pantalla,lo)
-                                actualizar(pantalla,lls)
+                                actualizar(pantalla,lls,score)
                                 pygame.display.flip()
                                 reloj.tick(TIME)
                     actual=bl.dir
@@ -553,7 +563,7 @@ def level_two(pantalla,nv,salud,score):
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
                         dibujar(pantalla,lo)
-                        actualizar(pantalla,lls)
+                        actualizar(pantalla,lls,score)
                         pygame.display.flip()
                         reloj.tick(TIME)
                 if pygame.mouse.get_pressed() == (0,1,0):
@@ -565,7 +575,7 @@ def level_two(pantalla,nv,salud,score):
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
                         dibujar(pantalla,lo)
-                        actualizar(pantalla,lls)
+                        actualizar(pantalla,lls,score)
                         pygame.display.flip()
                         reloj.tick(TIME)
                 if pygame.mouse.get_pressed() == (0,0,1):
@@ -577,7 +587,7 @@ def level_two(pantalla,nv,salud,score):
                     for i in range(len(bl.m[bl.dir])):
                         bl.x=i
                         dibujar(pantalla,lo)
-                        actualizar(pantalla,lls)
+                        actualizar(pantalla,lls,score)
                         reloj.tick(TIME)
                 actual=bl.dir
             if event.type==pygame.MOUSEBUTTONUP:
@@ -590,7 +600,7 @@ def level_two(pantalla,nv,salud,score):
                 bl.subir=False
                 bl.caer=False
                 actual=bl.dir
-        persecution(en,bl)
+        persecution(en,bl,7)
         col_je=pygame.sprite.spritecollide(bl,enemys,False)
         col_ej=pygame.sprite.spritecollide(en,jugadores,False)
         for element in col_je:
@@ -621,7 +631,7 @@ def level_two(pantalla,nv,salud,score):
             en.golpeo=False
             en.combo=False
             dibujar(pantalla,lo)
-            actualizar(pantalla,lls)
+            actualizar(pantalla,lls,score)
             reloj.tick(TIME)
             score+=3
             en.dir=5
@@ -630,7 +640,7 @@ def level_two(pantalla,nv,salud,score):
                 en.rect.x-=4
                 en.rect.y+=4
                 dibujar(pantalla,lo)
-                actualizar(pantalla,lls)
+                actualizar(pantalla,lls,score)
                 reloj.tick(5)
                 existe=False
             general.remove(en)
@@ -658,17 +668,19 @@ def level_two(pantalla,nv,salud,score):
                 else:
                     existe=False
                     TERM=True
+        if score%10==0 and bl.salud <= 98:
+            bl.salud+=2
         if not PAUSE:
             if not GAMEOVER:
                 if len(lv)==0:
                     dibujar(pantalla,lo)
-                    actualizar(pantalla,lls)
+                    actualizar(pantalla,lls,score)
                     GAMEOVER=True
                     print "gameover"
                     reloj.tick(TIME)
                 else:
                     dibujar(pantalla,lo)
-                    actualizar(pantalla,lls)
+                    actualizar(pantalla,lls,score)
 
             else:
                 final_game(pantalla)
@@ -681,5 +693,6 @@ def level_two(pantalla,nv,salud,score):
             reloj.tick(5)
             break
         bl.dir=actual
+        fuentes(pantalla,score)
         reloj.tick(TIME)
         #bl.rect.x-=2
